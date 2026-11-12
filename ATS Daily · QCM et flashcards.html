@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ATS Daily">
+<meta name="theme-color" content="#0c111b">
+<title>ATS Daily · QCM et flashcards</title>
+<style>
+:root{box-sizing:border-box;color-scheme:dark;--bg:#0c111b;--sf:#161e2e;--sf2:#212c44;--tx:#e8edf6;--mu:#93a0ba;--ok:#34d399;--ko:#f87171;--M:#a78bfa;--P:#38bdf8;--S:#fbbf24;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit;-webkit-tap-highlight-color:transparent}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;height:100%;display:flex;flex-direction:column;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;touch-action:manipulation;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;transition:transform .1s,background .15s}
+button:active{transform:scale(.97)}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 18px}
+header b{font-size:19px}
+#sk{background:var(--sf2);border-radius:20px;padding:6px 12px;font-weight:600;font-size:14px}
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 16px 20px;max-width:640px;width:100%;margin:0 auto}
+nav{display:flex;gap:8px;padding:8px 12px;background:var(--sf);border-top:1px solid var(--sf2)}
+nav button{flex:1;min-height:52px;border:0;border-radius:14px;background:transparent;color:var(--mu);font-weight:600}
+nav button.on{background:var(--sf2);color:var(--tx)}
+h1{font-size:32px;margin:8px 0 2px}
+.mu{color:var(--mu);font-size:14px;margin:4px 0}
+.seg{display:flex;gap:3px;margin:12px 0}
+.s{flex:1;height:8px;border-radius:4px;background:var(--c);opacity:.28}
+.s.cur{opacity:1}.s.ok{background:var(--ok);opacity:1}.s.ko{background:var(--ko);opacity:1}
+.row{display:flex;gap:8px;margin:12px 0}
+.row div{flex:1;padding:10px 6px;text-align:center;background:var(--sf);border-top:3px solid var(--c);border-radius:10px;font-size:14px}
+.tag{display:inline-block;color:var(--c);font-weight:700;font-size:14px}
+.q{font-size:19px;line-height:1.4;font-weight:600;margin:6px 0 10px}
+.o{display:block;width:100%;min-height:52px;text-align:left;padding:12px 14px;margin:8px 0;background:var(--sf);border:1.5px solid var(--sf2);border-radius:14px}
+.o.ok{border-color:var(--ok);background:rgba(52,211,153,.15)}
+.o.ko{border-color:var(--ko);background:rgba(248,113,113,.15)}
+.o:disabled{color:var(--tx);cursor:default}
+.ex{margin:12px 0;padding:12px 14px;background:var(--sf);border-left:4px solid var(--c);border-radius:10px;font-size:15px}
+.btn{display:block;width:100%;min-height:54px;margin:14px 0;border:0;border-radius:14px;background:var(--tx);color:var(--bg);font-weight:700;font-size:17px}
+.btn.g{background:var(--sf2);color:var(--tx)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0}
+.ch{min-height:48px;padding:0 16px;border-radius:24px;border:1.5px solid var(--sf2);background:transparent;white-space:nowrap}
+.ch.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.fc{perspective:1000px;-webkit-perspective:1000px;height:min(360px,52vh);margin:10px 0}
+.in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
+.in.fl{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:20px;overflow:auto;background:var(--sf);border:1.5px solid var(--c);border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face.b{transform:rotateY(180deg);font-size:16px}
+.face h2{font-size:22px;margin:0}
+.rt{display:flex;gap:8px}
+.rt[hidden]{display:none}
+.rt button{flex:1;min-height:52px;border:0;border-radius:14px;font-weight:700}
+[data-r="0"]{background:#3b1d24;color:var(--ko)}[data-r="1"]{background:#3a3015;color:var(--S)}[data-r="2"]{background:#12342b;color:var(--ok)}
+main h2{font-size:20px;margin:22px 0 8px}
+.rule{position:relative;height:20px;border-radius:6px;background:var(--sf2);overflow:hidden}
+.rule i{display:block;height:100%;background:var(--P);transition:width .6s}
+.rule.c i{background:var(--ok)}
+.rule::after{content:"";position:absolute;left:0;top:0;right:0;bottom:0;background:repeating-linear-gradient(90deg,transparent 0 9px,rgba(12,17,27,.6) 9px 10px)}
+#bg,#fx{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none}
+#bg{z-index:-1}#fx{z-index:60}
+#snd{min-width:48px;min-height:48px;border:0;background:transparent;font-size:22px}
+.o:not(:disabled):hover{border-color:var(--P);transform:translateX(4px);box-shadow:0 0 18px -6px var(--P)}
+.o.ok{animation:pl .5s}.o.ko{animation:sk .4s}.q{animation:in .3s both}.s.cur{animation:bl 1.1s infinite}.rule i{animation:fl .9s ease-out}
+.pop{position:fixed;z-index:70;pointer-events:none;font-weight:800;font-size:22px;text-shadow:0 2px 10px #000;animation:up 1s ease-out forwards}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 64px);z-index:80;pointer-events:none;white-space:nowrap;padding:10px 18px;border-radius:999px;background:var(--sf2);border:1.5px solid var(--S);font-weight:700;animation:tt 2.5s both}
+@keyframes pl{50%{transform:scale(1.04);box-shadow:0 0 26px rgba(52,211,153,.55)}}
+@keyframes sk{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+@keyframes bl{50%{opacity:.45}}
+@keyframes fl{from{width:0}}
+@keyframes up{from{transform:translate(-50%,-50%) scale(.6)}20%{transform:translate(-50%,-90%) scale(1.15)}to{transform:translate(-50%,-230%);opacity:0}}
+@keyframes tt{0%{opacity:0;transform:translate(-50%,-12px)}12%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas><canvas id="fx"></canvas><header><b>ATS Daily</b><span id="sk"></span><button id="snd" aria-label="Activer ou couper le son"></button></header>
+<main id="v"></main>
+<nav><button data-t="q">Quiz du jour</button><button data-t="f">Flashcards</button><button data-t="n">Niveau</button></nav>
+<script>
+/* Banque QCM : [matière, question, [options (la bonne en premier, mélangées à l’affichage)], 0, explication] */
+const Q=[
+["M","f est 2π-périodique et impaire. Que valent ses coefficients de Fourier aₙ (n ≥ 0) ?",["aₙ = 0 pour tout n","bₙ = 0 pour tout n","aₙ = bₙ","a₀ = π"],0,"<b>Méthode :</b> f(t)cos(nt) est impaire, son intégrale sur [−π, π] est nulle (a₀ compris). Seuls les bₙ restent. <b>Piège jury :</b> tracer une courbe réellement impaire et justifier la parité."],
+["M","Dirichlet : f est 2π-périodique, C¹ par morceaux, avec un saut en t₀. Vers quoi converge S(t₀) ?",["(f(t₀⁺) + f(t₀⁻)) / 2","f(t₀⁺)","f(t₀)","0"],0,"La série converge partout : vers f(t) en un point de continuité, vers la moyenne des limites en un saut. <b>Piège jury :</b> la convergence aux discontinuités est souvent mal comprise."],
+["M","Avec aₙ = 0 et bₙ = 1/n pour f(t) = (π − t)/2 sur ]0, π[ (impaire), Parseval donne ½∑bₙ² = (1/2π)∫f² sur [−π, π]. Que vaut ∑ 1/n² ?",["π²/6","π²/12","π²/8","π²/3"],0,"(1/2π)∫f² = (1/π)∫₀^π (π−t)²/4 dt = π²/12, donc ½∑1/n² = π²/12 et ∑1/n² = π²/6. <b>Piège :</b> oublier le facteur ½ devant ∑(aₙ²+bₙ²)."],
+["M","A est la matrice 3×3 dont tous les coefficients valent 1 sauf la diagonale (nulle). Ses valeurs propres ?",["−1 (double) et 2","1 (double) et −2","0 et 3","−1, 1 et 2"],0,"A = B − I, avec B = matrice de 1 (rang 1, trace 3) : Sp(B) = {0, 0, 3} donc Sp(A) = {−1, −1, 2}. <b>Piège jury :</b> inversible ≠ diagonalisable ; donner une base de chaque sous-espace propre, pas seulement le rang."],
+["M","Pour développer (B − I)ⁿ avec le binôme de Newton, que faut-il justifier ?",["B et I commutent","B est inversible","B est symétrique","B est diagonalisable"],0,"I commute avec toute matrice, donc B et −I commutent et Aⁿ = ∑ C(n,k)(−1)ⁿ⁻ᵏBᵏ. <b>Piège jury :</b> cette justification est exigée et souvent oubliée."],
+["M","Développement de cₙ = (1 + 1/n)ⁿ quand n → +∞ ?",["e − e/(2n) + o(1/n)","e + e/(2n) + o(1/n)","e − e/n + o(1/n)","1 + 1/n + o(1/n)"],0,"cₙ = exp(n ln(1+h)), h = 1/n → 0 : n ln(1+h) = 1 − h/2 + o(h), puis exp(1+u) = e(1+u+…). <b>Piège jury :</b> on ne compose des DL qu’au voisinage de 0."],
+["M","Solution générale de y″ + 2y′ + 5y = 0 ?",["e⁻ˣ(A cos 2x + B sin 2x)","e⁻ˣ(A cos 5x + B sin 5x)","Ae⁻ˣ + Be⁻⁵ˣ","(A + Bx)e⁻ˣ"],0,"r² + 2r + 5 = 0, Δ = −16 &lt; 0, r = −1 ± 2i. Δ &gt; 0 : deux exponentielles ; Δ = 0 : (A + Bx)eʳˣ."],
+["M","Résoudre y′ + 2y = 4 avec y(0) = 0.",["y = 2(1 − e⁻²ˣ)","y = 2e⁻²ˣ","y = 4(1 − e⁻²ˣ)","y = 2(e²ˣ − 1)"],0,"Homogène : Ce⁻²ˣ ; particulière constante : 2 ; y(0) = 0 ⇒ C = −2. <b>Réflexe :</b> réinjecter dans l’équation et la condition initiale."],
+["P","Plan infini uniformément chargé (σ) : champ à la distance z > 0 ?",["σ/(2ε₀) selon +e_z, indépendant de z","σ/ε₀ selon +e_z","σ/(2ε₀z) selon +e_z","0"],0,"Invariances en x, y ⇒ E = E(z) ; plans de symétrie (M, e_x, e_z) et (M, e_y, e_z) ⇒ E ∥ e_z ; Gauss sur un cylindre de section S : 2ES = σS/ε₀. <b>Piège jury :</b> citer le plan (Oxy) comme plan de symétrie des charges (pas d’antisymétrie) pour E(−z) = −E(z)."],
+["P","Condensateur plan, tension U constante, distance z, C(z) = ε₀S/z. Que vaut Fₑ = d/dz(½CU²) ?",["−ε₀SU²/(2z²) : attractive","+ε₀SU²/(2z²) : répulsive","−ε₀SU²/(2z) : attractive","ε₀SU²/z : attractive"],0,"d/dz(ε₀SU²/(2z)) = −ε₀SU²/(2z²) selon e_z : la force tend à réduire z, elle est attractive. À l’équilibre : mg = ε₀SU²/(2z²). <b>Piège :</b> justifier « attractive »."],
+["P","Charge d’un circuit RC sous un échelon E : que vaut u à t = τ = RC ?",["≈ 0,63 E","≈ 0,37 E","≈ 0,95 E","E"],0,"u(t) = E(1 − e^(−t/τ)) donc u(τ) = E(1 − 1/e) ≈ 0,63 E ; à 3τ : 95 %. <b>Piège jury :</b> justifier u(0⁺) = 0 par continuité de la tension aux bornes du condensateur."],
+["P","Passe-bas d’ordre 1, H = 1/(1 + jω/ω₀) : pente en haute fréquence et gain en ω₀ ?",["−20 dB/décade ; −3 dB","−40 dB/décade ; −3 dB","−20 dB/décade ; 0 dB","+20 dB/décade ; −3 dB"],0,"|H| = 1/√(1+(ω/ω₀)²) : 1/√2 (−3 dB) en ω₀, ≈ ω₀/ω en HF. Phase de 0 à −90° (−45° en ω₀). <b>Piège jury :</b> le j ne doit plus apparaître dans le module."],
+["P","Poussée d’Archimède sur un cylindre (R = 2 cm, h = 4 cm) dans l’air (ρ ≈ 1 kg·m⁻³) : ordre de grandeur ?",["≈ 5 × 10⁻⁴ N","≈ 5 × 10⁻² N","≈ 5 × 10⁻⁶ N","≈ 0,5 N"],0,"Π = ρ_air·V·g, V = πR²h ≈ 5 × 10⁻⁵ m³ ⇒ Π ≈ 5 × 10⁻⁴ N, soit ≈ 50 mg, bien au-dessus de 10 µg : à corriger. <b>Piège jury :</b> volume du cylindre inhomogène, résultat laissé en fraction au lieu de l’écriture scientifique."],
+["P","Tige de longueur a glissant à v₀ sur des rails, champ B₀ uniforme perpendiculaire au circuit : |e| ?",["a·B₀·v₀","B₀·v₀ / a","a·B₀·v₀²","a·B₀ / v₀"],0,"Φ = B₀·a·(L₀ + v₀t) avec la normale cohérente avec le courant orienté ; e = −dΦ/dt ⇒ |e| = aB₀v₀. <b>Piège jury :</b> représenter la normale au circuit ; L₀ est constante, sa dérivée n’est pas v₀."],
+["P","Gaz parfait, transformation isotherme : pourquoi ΔU = 0 ?",["U ne dépend que de T (1re loi de Joule), donc Q = −W","Parce que Q = 0","Parce que W = 0","Parce que P est constante"],0,"1er principe : ΔU = W + Q (système fermé). Isotherme réversible : W = −nRT ln(V₂/V₁), Q = −W. Adiabatique réversible : PVᵞ = cte."],
+["P","Théorème d’Ampère : champ B à la distance r d’un fil infini parcouru par I ?",["μ₀I / (2πr)","μ₀I / (4πr²)","μ₀I / (2πr²)","μ₀I·2πr"],0,"∮B·dl = μ₀I_enlacé sur un cercle de rayon r : B·2πr = μ₀I, B orthoradial. <b>Méthode :</b> symétries, invariances, contour orienté, courant enlacé algébrique."],
+["S","Retour unitaire, correcteur Kp, système H(p) = G/(1 + τp). Constante de temps de la FTBF ?",["τ / (1 + Kp·G)","τ·(1 + Kp·G)","τ","τ / Kp"],0,"FTBO = KpG/(1+τp) ⇒ FTBF = [KpG/(1+KpG)] / (1 + τp/(1+KpG)). Kp grand : plus rapide et erreur plus faible. <b>Piège jury :</b> lire le schéma-bloc avec soin (retour, signe du comparateur)."],
+["S","Classe 0, gain statique de la FTBO = K, retour unitaire, échelon unitaire : erreur statique ?",["1/(1 + K)","K/(1 + K)","0","1/K"],0,"ε = lim p·E(p), E = 1/(p(1+FTBO)) ⇒ ε = 1/(1+K). Pour l’annuler : ajouter une intégration (correcteur intégral)."],
+["S","Dénominateur de la FTBF : p³ + 2p² + 3p + K. Stabilité (Routh) ?",["0 &lt; K &lt; 6","K &gt; 6","0 &lt; K &lt; 3","K &lt; 0"],0,"Colonne de Routh : 1 ; 2 ; (6 − K)/2 ; K. Tous positifs ⇔ 0 &lt; K &lt; 6. <b>Rappel :</b> stable ⇔ pôles à partie réelle strictement négative."],
+["S","Comment lit-on la marge de phase ?",["180° + arg FTBO à la pulsation où |FTBO| = 0 dB","−arg FTBO quand arg = −180°","|FTBO| quand arg = 0°","À la coupure de la FTBF"],0,"Mφ = 180° + φ(ωc0) avec |FTBO(jωc0)| = 1. Critère usuel : Mφ ≥ 45° (marge de gain ≥ 10 dB)."],
+["S","Temps de réponse à 5 % d’un 1er ordre de constante de temps τ ?",["≈ 3τ","≈ τ","≈ 5τ","≈ 0,63τ"],0,"À 3τ : 1 − e⁻³ ≈ 95 % de la valeur finale. En boucle fermée : tr5% = 3τ/(1+KpG). <b>Piège :</b> vérifier les unités et comparer à l’exigence du cahier des charges."],
+["S","Deux liaisons en parallèle entre 0 et 1 : liaison équivalente ?",["Intersection des torseurs cinématiques (ou somme des torseurs statiques)","Somme des torseurs cinématiques","Produit des torseurs statiques","La liaison de plus faible degré"],0,"En parallèle, le mouvement relatif doit satisfaire les deux liaisons (intersection cinématique) ; les actions s’additionnent. <b>Piège :</b> exprimer les torseurs au même point (M_B = M_A + BA ∧ R)."],
+["S","Ec = ½Jₘωₘ² + ½J_vω_v² + ½Mẋ², ω_v = r·ωₘ, ẋ = k·ωₘ. Inertie équivalente ramenée au moteur ?",["Jₘ + r²·J_v + M·k²","Jₘ + J_v + M","Jₘ + J_v/r² + M/k²","Jₘ·r² + J_v + M·k"],0,"Par identification avec ½J_eq·ωₘ² : J_eq = Jₘ + r²J_v + Mk². Puis TEC : J_eq·ω̇ₘ = Cₘ − C_r. <b>Piège jury :</b> contrôler l’homogénéité (kg·m²)."],
+["S","Onduleur triphasé pleine onde sous E : valeurs possibles de la tension simple v₁ ?",["±E/3 et ±2E/3","0 et E","±E/2","±E et 0"],0,"u₁₂ ∈ {0, ±E} et v₁ = (u₁₂ − u₃₁)/3 ⇒ ±E/3 ou ±2E/3. <b>Piège :</b> Tₓ et Tₓ’ jamais fermés ensemble (court-circuit de la source)."]
+];
+/* Flashcards : [matière, recto, verso] */
+const C=[
+["M","Théorème de Dirichlet","f 2π-périodique, C¹ par morceaux ⇒ S(t) converge vers [f(t⁺) + f(t⁻)]/2 ; = f(t) aux points de continuité.<br><b>Usage :</b> S(π/2) donne ∑(−1)ᵖ/(2p+1) = π/4."],
+["M","Identité de Parseval","f 2π-périodique, continue par morceaux :<br>a₀² + ½∑(aₙ² + bₙ²) = (1/2π)∫f² sur [−π, π].<br><b>Usage :</b> ∑1/n² = π²/6."],
+["M","Coefficients de Fourier","a₀ = valeur moyenne ; aₙ = (1/π)∫f(t)cos(nt)dt ; bₙ = (1/π)∫f(t)sin(nt)dt (période 2π).<br>f paire ⇒ bₙ = 0 ; f impaire ⇒ aₙ = 0 et a₀ = 0."],
+["M","DL usuels en 0","eˣ = 1 + x + x²/2 + o(x²)<br>ln(1+x) = x − x²/2 + o(x²)<br>sin x = x − x³/6 + o(x³) ; cos x = 1 − x²/2 + o(x²)<br><b>Attention :</b> composer seulement si l’argument tend vers 0."],
+["M","Diagonalisation","A diagonalisable ⇔ ∑dim E_λ = n (polynôme caractéristique scindé, dim E_λ = multiplicité).<br>n valeurs propres distinctes ⇒ diagonalisable.<br><b>Piège :</b> diagonalisable ≠ inversible."],
+["M","Suites adjacentes","uₙ croissante, vₙ décroissante, vₙ − uₙ → 0 ⇒ même limite ℓ, uₙ ≤ ℓ ≤ vₙ.<br><b>Piège jury :</b> tester les premiers termes ne prouve rien ; étudier le signe de uₙ₊₁ − uₙ."],
+["P","Théorème de Gauss : méthode","∯E·dS = Q_int/ε₀.<br>1) symétries 2) invariances 3) surface de Gauss 4) flux 5) Q_int.<br>Plan infini : σ/(2ε₀) ; condensateur plan : σ/ε₀ entre les plaques, 0 dehors ; C = ε₀S/d."],
+["P","Loi de Faraday et normale","e = −dΦ/dt, Φ = ∬B·n dS.<br>La normale n est liée au sens du courant (main droite). <b>Piège jury :</b> la dessiner. Lenz : le courant induit s’oppose à la cause."],
+["P","RC en régime sinusoïdal forcé","Z_R = R, Z_C = 1/(jCω).<br>u = e/(1 + jRCω) ⇒ U₀ = E₀/√(1 + (RCω)²).<br>Si RCω ≫ 1 : U₀ ≈ E₀/(RCω)."],
+["P","1er et 2e principes","1er : ΔU = W + Q (système fermé) ; GP : dU = nC_v dT.<br>2e : ΔS = S_éch + S_créée, S_créée ≥ 0 (= 0 si réversible).<br>Adiabatique réversible GP : PVᵞ = cte."],
+["P","Mécanique : PFD, TEC, Archimède","PFD : m·a = ∑F. TEC : ΔEc = ∑W.<br>Archimède : Π = ρ_fluide·V_immergé·g, vers le haut.<br>Chute libre : z = ½gt², t = √(2d/g)."],
+["P","Incertitudes et compatibilité","Écart normalisé = |x₁ − x₂| / √(u₁² + u₂²) ; compatible si &lt; 2.<br>Régression τ = aR + b : identifier a et b aux grandeurs physiques (a = C)."],
+["S","Asservissement : FTBF et erreur","FTBF = FTBO/(1 + FTBO) (retour unitaire).<br>Erreur statique à l’échelon : classe 0 → 1/(1+K) ; classe ≥ 1 → 0.<br>Laplace, conditions de Heaviside : dy/dt → pY(p)."],
+["S","Stabilité et marges","Stable ⇔ pôles de la FTBF à partie réelle &lt; 0 (Routh : première colonne de même signe).<br>Mφ = 180° + φ(ωc0) ≥ 45° ; marge de gain ≥ 10 dB."],
+["S","Fermeture géométrique","Cycle OABO : OA + AB + BO = 0, projeté sur x₀ et y₀ ⇒ 2 équations scalaires.<br>P·cosθ + Q·sinθ = R ⇒ cos(θ − ψ) = R/√(P²+Q²)."],
+["S","Torseurs et liaisons","Statique : M_B = M_A + BA ∧ R. Cinématique : V_B = V_A + BA ∧ Ω.<br>Parallèle : cinématique = intersection, statique = somme. Série : l’inverse."],
+["S","Coussinets : pression et vitesse","p = F_R/(d·b) (surface projetée) ≤ p_max.<br>v = ω·d/2 = π·N·d/60 (N en tr/min) ≤ v_max.<br>F_R = F/4 pour 4 bielles."],
+["S","Cadence, énergétique, onduleur","t_cycle (s) = 3600 × pièces par cycle / cadence (pièces/h). <b>Piège jury :</b> cadence ≠ temps de cycle ; ne pas oublier le retour des éjecteurs.<br>TEC : J_eq·ω̇ = Cₘ − C_r ; J = mR²/2.<br>Onduleur : v₁ = (u₁₂ − u₃₁)/3."]
+];
+const $=s=>document.querySelector(s),NM={M:"Maths",P:"Physique",S:"SII"},K="ats_q",KF="ats_f";
+const h=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const sv=(k,x)=>{try{localStorage.setItem(k,JSON.stringify(x))}catch(e){}};
+const fmt=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=()=>fmt(new Date()),yest=()=>fmt(new Date(Date.now()-864e5));
+function rng(s){let a=0;for(const c of String(s))a=Math.imul(a,31)+c.charCodeAt(0)|0;return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const shuf=(x,r)=>{const a=x.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let st=ld(K,{streak:0,last:"",d:null,xp:0,n:0,t:{M:[0,0],P:[0,0],S:[0,0]}}),ms=ld(KF,{}),tab="q",inq=false,fb=null,fc={f:"ALL",i:0,deck:[]};
+const v=$("#v");st.xp=st.xp||0;st.n=st.n||0;st.t=st.t||{M:[0,0],P:[0,0],S:[0,0]};
+function plan(){const t=today();if(st.d&&st.d.date===t)return;const r=rng(t);let ids=[];for(const s of"MPS")ids=ids.concat(shuf(Q.map((q,i)=>i).filter(i=>Q[i][0]===s),r).slice(0,5));st.d={date:t,ids,a:{}};inq=false;fb=null;sv(K,st)}
+function fin(){const t=today();if(st.last!==t){st.streak=st.last===yest()?st.streak+1:1;st.last=t;st.n++;const g=Object.values(st.d.a).filter(x=>x===0).length;st.xp+=Math.min(st.streak,7)*5+(g===15?25:0)}}
+const segs=(d,n)=>d.ids.map((id,k)=>{const a=d.a[id];return`<i class="s ${a===undefined?(k===n&&inq?"cur":""):a===0?"ok":"ko"}" style="--c:var(--${Q[id][0]})"></i>`}).join("");
+function qz(){
+ const d=st.d,n=Object.keys(d.a).length;
+ if(n===15&&fb===null)return done(d);
+ if(!inq&&fb===null)return`<h1>Défi du jour</h1><p class="mu">${new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}</p><div class="seg">${segs(d,n)}</div><div class="row">${["M","P","S"].map(s=>`<div style="--c:var(--${s})">${NM[s]}<br><b>5 questions</b></div>`).join("")}</div><button class="btn" data-go>${n?"Reprendre ("+n+"/15)":"Commencer les 15 questions"}</button><p class="mu">Un seul lot par jour. Chaque réponse est corrigée et expliquée tout de suite.</p>`;
+ const k=fb!==null?fb:n,id=d.ids[k],q=Q[id],a=d.a[id],ord=shuf([0,1,2,3],rng(d.date+id));
+ return`<div class="seg">${segs(d,k)}</div><span class="tag" style="--c:var(--${q[0]})">${NM[q[0]]} · question ${k+1}/15</span><p class="q">${h(q[1])}</p>${ord.map(o=>`<button class="o${a===undefined?"":o===0?" ok":o===a?" ko":""}" data-a="${o}" ${a===undefined?"":"disabled"}>${h(q[2][o])}</button>`).join("")}${a===undefined?"":`<div class="ex" style="--c:var(--${q[0]})"><b>${a===0?"Correct.":"Incorrect."}</b> ${q[4]}</div><button class="btn" data-nx>${k===14?"Voir mon bilan":"Question suivante"}</button>`}`}
+function done(d){
+ const sc=s=>d.ids.filter(i=>Q[i][0]===s&&d.a[i]===0).length,t=sc("M")+sc("P")+sc("S");
+ const m=t>=13?"Niveau podium. Garde ce rythme.":t>=9?"Solide. Relis les points manqués demain matin.":"Les erreurs d’aujourd’hui sont les points de demain. Reviens demain.";
+ return`<h1>${t}/15</h1><p>${m}</p><div class="seg">${segs(d,15)}</div><div class="row">${["M","P","S"].map(s=>`<div style="--c:var(--${s})">${NM[s]}<br><b>${sc(s)}/5</b></div>`).join("")}</div><p class="mu">Série en cours : ${st.streak} jour${st.streak>1?"s":""} · ${st.xp} XP, niveau ${lvl()+1} (${LV[lvl()][1]}). Le prochain lot arrive demain.</p><button class="btn" data-t="n">Voir ma progression</button><button class="btn g" data-t="f">Réviser en flashcards</button>`}
+function fcv(){
+ const ids=C.map((c,i)=>i).filter(i=>fc.f==="ALL"||C[i][0]===fc.f);
+ if(!fc.deck.length||fc.i>=fc.deck.length){fc.deck=shuf(ids,Math.random).sort((a,b)=>(ms[a]||0)-(ms[b]||0));fc.i=0}
+ const id=fc.deck[fc.i],c=C[id];
+ return`<div class="chips">${[["ALL","Toutes"],["M","Maths"],["P","Physique"],["S","SII"]].map(([k,l])=>`<button class="ch${fc.f===k?" on":""}" data-f="${k}">${l}</button>`).join("")}</div><p class="mu">Carte ${fc.i+1}/${fc.deck.length} · maîtrisées ${ids.filter(i=>ms[i]===2).length}/${ids.length}</p><div class="fc" data-flip style="--c:var(--${c[0]})"><div class="in" id="in"><div class="face"><span class="tag">${NM[c[0]]}</span><h2>${h(c[1])}</h2><span class="mu">Touche la carte pour la retourner</span></div><div class="face b">${c[2]}</div></div></div><div class="rt" id="rt" hidden><button data-r="0">À revoir</button><button data-r="1">Moyen</button><button data-r="2">Maîtrisée</button></div>`}
+const LV=[[0,"Recrue ATS"],[150,"Taupin·e"],[400,"Rigoureux·se"],[800,"Admissible INP"],[1400,"Top 100"],[2200,"Top 50"],[3200,"Top 20"],[4500,"Prétendant·e Centrale"],[6000,"Niveau CentraleSupélec"],[8000,"Major · Rang 1"]];
+const lvl=()=>{let i=0;while(i<LV.length-1&&st.xp>=LV[i+1][0])i++;return i},live=()=>(st.last===today()||st.last===yest())?st.streak:0;
+function lv(){
+ const i=lvl(),c=LV[i],nx=LV[i+1],p=nx?Math.round((st.xp-c[0])/(nx[0]-c[0])*100):100,cs=Math.min(100,Math.round(st.xp/LV[8][0]*100)),tot=st.t.M[1]+st.t.P[1]+st.t.S[1];
+ return`<h1>Niveau ${i+1}</h1><p class="mu">${c[1]} · ${st.xp} XP</p><div class="rule"><i style="width:${p}%"></i></div><p class="mu">${nx?"Prochain palier, "+nx[1]+" : encore "+(nx[0]-st.xp)+" XP.":"Palier maximal atteint."}</p><h2>Distance CentraleSupélec</h2><div class="rule c"><i style="width:${cs}%"></i></div><p class="mu">${cs} % du chemin${cs>=100?". Tu es au niveau visé, maintiens-le.":", encore "+(LV[8][0]-st.xp)+" XP."}</p><h2>Réussite par matière</h2><div class="row">${["M","P","S"].map(s=>{const a=st.t[s][0],b=st.t[s][1];return`<div style="--c:var(--${s})">${NM[s]}<br><b>${b?Math.round(a/b*100)+" %":"–"}</b></div>`}).join("")}</div><p class="mu">${tot} réponse${tot>1?"s":""} · ${st.n} journée${st.n>1?"s":""} complète${st.n>1?"s":""} · série en cours : ${live()}.</p><p class="mu">+10 XP par bonne réponse, bonus de série (jusqu’à +35) et +25 pour un 15/15. Indicateur d’entraînement personnel, pas un classement officiel.</p>`}
+function render(){
+ plan();
+ $("#sk").textContent="Niv. "+(lvl()+1)+" · 🔥 "+live();
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+ v.innerHTML=tab==="q"?qz():tab==="n"?lv():fcv();v.scrollTop=0}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button,[data-flip]");if(!b)return;const D=b.dataset;
+ if(navigator.vibrate)navigator.vibrate(10);
+ if(D.t){tab=D.t;render()}
+ else if(D.go!==undefined){inq=true;render()}
+ else if(D.a!==undefined){const n=Object.keys(st.d.a).length;if(fb!==null||n>14)return;st.d.a[st.d.ids[n]]=+D.a;{const s=Q[st.d.ids[n]][0],L0=lvl(),ok=+D.a===0;st.t[s][1]++;if(ok){st.t[s][0]++;st.xp+=10}react(b,ok,lvl()>L0)}fb=n;if(n===14)fin();sv(K,st);render()}
+ else if(D.nx!==undefined){fb=null;render()}
+ else if(D.f!==undefined){fc.f=D.f;fc.deck=[];render()}
+ else if(D.r!==undefined){if(+D.r===2){const[x,y]=at(b);burst(x,y,'#34d399',26);tone(784,0,.12);tone(1047,.09,.16)}ms[fc.deck[fc.i]]=+D.r;sv(KF,ms);fc.i++;render()}
+ else if(D.flip!==undefined){tone(520,0,.05);const x=$("#in");x.classList.toggle("fl");$("#rt").hidden=!x.classList.contains("fl")}
+});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)render()});
+const bg=$('#bg'),fx=$('#fx'),bx=bg.getContext('2d'),fq=fx.getContext('2d'),RM=matchMedia('(prefers-reduced-motion: reduce)').matches,CL={M:'167,139,250',P:'56,189,248',S:'251,191,36'},HX=['#a78bfa','#38bdf8','#fbbf24'],GL=[['∫','M'],['Σ','M'],['π','M'],['∞','M'],['√','M'],['ω','P'],['∇','P'],['Φ','P'],['ε₀','P'],['μ₀','P'],['H(p)','S'],['Δ','S'],['τ','S'],['θ','S']];
+let W,H,mx=.5,my=.5,sx=.5,sy=.5,G=[],S=[],P=[],raf,cb=0,AC,mute=ld('ats_m',0);
+function size(){const d=Math.min(devicePixelRatio||1,2),r=Math.random;W=innerWidth;H=innerHeight;for(const c of[bg,fx]){c.width=W*d;c.height=H*d}bx.setTransform(d,0,0,d,0,0);fq.setTransform(d,0,0,d,0,0);G=Array.from({length:Math.min(28,Math.floor(W*H/32000))},()=>({g:GL[Math.floor(r()*GL.length)],x:r()*W,y:r()*H,z:.5+r()*.8,a:r()*6.28,v:.12+r()*.2}));S=Array.from({length:70},()=>({x:r()*W,y:r()*H,z:.6+r()*1.4,p:r()*6.28}))}
+const glow=(x,y,c,a)=>{const g=bx.createRadialGradient(x,y,0,x,y,Math.max(W,H)*.6);g.addColorStop(0,'rgba('+c+','+a+')');g.addColorStop(1,'rgba('+c+',0)');bx.fillStyle=g;bx.fillRect(0,0,W,H)};
+function frame(t){sx+=(mx-sx)*.05;sy+=(my-sy)*.05;bx.clearRect(0,0,W,H);glow(W*(.25+.5*sx),H*(.2+.3*sy),CL.M,.17);glow(W*(.85-.5*sx),H*(.9-.3*sy),CL.P,.13);for(const s of S){bx.fillStyle='rgba(232,237,246,'+(.3+.3*Math.sin(t/900+s.p))+')';bx.fillRect(((s.x-(sx-.5)*40*s.z)%W+W)%W,((s.y-(sy-.5)*40*s.z)%H+H)%H,s.z,s.z)}bx.textAlign='center';for(const o of G){if(!RM){o.y-=o.v*o.z;o.a+=.003}if(o.y<-40){o.y=H+40;o.x=Math.random()*W}bx.save();bx.translate(o.x-(sx-.5)*70*o.z,o.y-(sy-.5)*70*o.z);bx.rotate(Math.sin(o.a)*.4);bx.font=Math.round(30*o.z)+'px Georgia,serif';bx.fillStyle='rgba('+CL[o.g[1]]+','+(.1+.1*o.z)+')';bx.fillText(o.g[0],0,0);bx.restore()}fq.clearRect(0,0,W,H);for(let i=P.length-1;i>=0;i--){const p=P[i];p.x+=p.vx;p.y+=p.vy;p.vy+=p.gr;if(--p.l<=0){P.splice(i,1);continue}fq.globalAlpha=p.l/p.m;fq.fillStyle=p.c;fq.beginPath();fq.arc(p.x,p.y,p.s,0,6.283);fq.fill()}fq.globalAlpha=1;if(!RM)raf=requestAnimationFrame(frame)}
+const burst=(x,y,c,n,v)=>{if(RM)return;for(let i=0;i<n;i++){const a=Math.random()*6.283,w=(v||5)*(.3+Math.random());P.push({x:x,y:y,vx:Math.cos(a)*w,vy:Math.sin(a)*w-2,gr:.13,l:45+Math.random()*30|0,m:75,s:1.5+Math.random()*2.5,c:c||HX[i%3]})}};
+const trail=(x,y)=>{if(RM||P.length>220)return;P.push({x:x,y:y,vx:Math.random()-.5,vy:Math.random()-.5,gr:0,l:24,m:24,s:2+Math.random()*2.5,c:HX[Math.floor(Date.now()/500)%3]})};
+const at=b=>{const r=b.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2]};
+const pop=(t,x,y,c)=>{const d=document.createElement('div');d.className='pop';d.textContent=t;d.style.cssText='left:'+x+'px;top:'+y+'px;color:'+c;document.body.appendChild(d);setTimeout(()=>d.remove(),1000)};
+const toast=t=>{const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2500)};
+const tone=(f,t,d,y)=>{if(mute)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime+t;o.type=y||'sine';o.frequency.value=f;g.gain.setValueAtTime(.1,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(AC.destination);o.start(n);o.stop(n+d)}catch(e){}};
+function react(b,ok,up){const[x,y]=at(b);cb=ok?cb+1:0;if(ok){burst(x,y,'#34d399',30);pop('+10 XP',x,y,'#34d399');tone(660,0,.12);tone(880,.09,.16);if(cb>=3&&!up)setTimeout(()=>toast('Combo ×'+cb),350)}else{burst(x,y,'#f87171',16,3);pop('Pas cette fois',x,y,'#f87171');tone(150,0,.28,'sawtooth')}if(up){burst(innerWidth/2,innerHeight/3,null,90,9);toast('Niveau '+(lvl()+1)+' : '+LV[lvl()][1]);[523,659,784,1047].forEach((f,i)=>tone(f,.15+i*.1,.2))}}
+size();$('#snd').textContent=mute?'🔇':'🔊';$('#snd').onclick=()=>{mute=mute?0:1;sv('ats_m',mute);$('#snd').textContent=mute?'🔇':'🔊';tone(660,0,.08)};addEventListener('resize',()=>{size();if(RM)frame(0)});addEventListener('pointermove',e=>{mx=e.clientX/W;my=e.clientY/H;if(e.pointerType==='mouse'||e.buttons)trail(e.clientX,e.clientY)},{passive:true});addEventListener('pointerdown',e=>{mx=e.clientX/W;my=e.clientY/H;burst(e.clientX,e.clientY,null,8,3)},{passive:true});document.addEventListener('visibilitychange',()=>{cancelAnimationFrame(raf);if(!document.hidden)frame(0)});frame(0);
+render();
+</script>
+</body>
+</html>
